@@ -6,7 +6,7 @@ import (
 	"github.com/WilliamMortlMicrosoft/AzureGoSamples/internal/config"
 	"github.com/WilliamMortlMicrosoft/AzureGoSamples/internal/iam"
 
-	"github.com/Azure/azure-sdk-for-go/services/keyvault/2016-10-01/keyvault"
+	"github.com/Azure/azure-sdk-for-go/services/keyvault/v7.0/keyvault"
 	"github.com/Azure/go-autorest/autorest/to"
 )
 

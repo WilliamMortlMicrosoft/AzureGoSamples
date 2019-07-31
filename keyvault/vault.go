@@ -11,7 +11,7 @@ import (
 	"encoding/json"
 	"log"
 
-	"github.com/Azure/azure-sdk-for-go/services/keyvault/mgmt/2016-10-01/keyvault"
+	"github.com/Azure/azure-sdk-for-go/services/keyvault/mgmt/2018-02-14/keyvault"
 
 	"github.com/WilliamMortlMicrosoft/AzureGoSamples/internal/config"
 	"github.com/WilliamMortlMicrosoft/AzureGoSamples/internal/iam"
@@ -36,7 +36,7 @@ func CreateVault(ctx context.Context, vaultName string) (keyvault.Vault, error) 
 		return keyvault.Vault{}, err
 	}
 
-	return vaultsClient.CreateOrUpdate(
+	_, errRet := vaultsClient.CreateOrUpdate(
 		ctx,
 		config.GroupName(),
 		vaultName,
@@ -52,6 +52,13 @@ func CreateVault(ctx context.Context, vaultName string) (keyvault.Vault, error) 
 			},
 		},
 	)
+
+	var vaultRet keyvault.Vault
+	if (errRet == nil) {
+		vaultRet, errRet = GetVault(ctx, vaultName)
+	}
+
+	return vaultRet, errRet
 }
 
 // GetVault returns an existing vault
@@ -86,7 +93,7 @@ func CreateVaultWithPolicies(ctx context.Context, vaultName, userID string) (vau
 		apList = append(apList, ap)
 	}
 
-	return vaultsClient.CreateOrUpdate(
+	_, errRet := vaultsClient.CreateOrUpdate(
 		ctx,
 		config.GroupName(),
 		vaultName,
@@ -101,8 +108,15 @@ func CreateVaultWithPolicies(ctx context.Context, vaultName, userID string) (vau
 				},
 				TenantID: &tenantID,
 			},
-		})
+		},
+	)
 
+	var vaultRet keyvault.Vault
+	if (errRet == nil) {
+		vaultRet, errRet = GetVault(ctx, vaultName)
+	}
+
+	return vaultRet, errRet
 }
 
 // SetVaultPermissions adds an access policy permitting this app's Client ID to manage keys and secrets.
@@ -147,12 +161,19 @@ func SetVaultPermissions(ctx context.Context, vaultName string) (keyvault.Vault,
 	buffN, _ := json.MarshalIndent(&valueForUpdate, "", " ")
 	fmt.Printf(string(buffN))
 
-	return vaultsClient.CreateOrUpdate(
+	_, errRet := vaultsClient.CreateOrUpdate(
 		ctx,
 		config.GroupName(),
 		vaultName,
 		valueForUpdate,
 	)
+
+	var vaultRet keyvault.Vault
+	if (errRet == nil) {
+		vaultRet, errRet = GetVault(ctx, vaultName)
+	}
+
+	return vaultRet, errRet
 }
 
 // SetVaultPermissionsForDeployment updates a key vault to enable deployments and add permissions to the application
@@ -164,7 +185,7 @@ func SetVaultPermissionsForDeployment(ctx context.Context, vaultName string) (ke
 	}
 	clientID := config.ClientID()
 
-	return vaultsClient.CreateOrUpdate(
+	_, errRet := vaultsClient.CreateOrUpdate(
 		ctx,
 		config.GroupName(),
 		vaultName,
@@ -199,6 +220,13 @@ func SetVaultPermissionsForDeployment(ctx context.Context, vaultName string) (ke
 			},
 		},
 	)
+
+	var vaultRet keyvault.Vault
+	if (errRet == nil) {
+		vaultRet, errRet = GetVault(ctx, vaultName)
+	}
+
+	return vaultRet, errRet
 }
 
 // GetVaults lists all key vaults in a subscription
