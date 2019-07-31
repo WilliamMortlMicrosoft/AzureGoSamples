@@ -16,7 +16,7 @@ import (
 
 	"github.com/WilliamMortlMicrosoft/AzureGoSamples/internal/config"
 	"github.com/WilliamMortlMicrosoft/AzureGoSamples/internal/util"
-	"github.com/Azure-Samples/azure-sdk-for-go-samples/resources"
+	"github.com/WilliamMortlMicrosoft/AzureGoSamples/resources"
 )
 
 var (

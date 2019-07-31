@@ -15,3 +15,4 @@ export AZURE_CLIENT_SECRET=4d4cf874-9964-42eb-8f37-c0674cecdbae
 export AZURE_LOCATION_DEFAULT=centralus
 export AZURE_BASE_GROUP_NAME=azure-samples-go
 export AZURE_KEEP_SAMPLE_RESOURCES=0
+export AZURE_AUTH_LOCATION=centralus
