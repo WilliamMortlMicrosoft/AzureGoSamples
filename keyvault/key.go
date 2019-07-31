@@ -40,6 +40,10 @@ func CreateKey(ctx context.Context, vaultName, keyName string) (key keyvault.Key
 			KeyOps: &[]keyvault.JSONWebKeyOperation{
 				keyvault.Encrypt,
 				keyvault.Decrypt,
+				keyvault.Sign,
+				keyvault.Verify,
+				keyvault.WrapKey,
+				keyvault.UnwrapKey,
 			},
 			Kty: keyvault.RSA,
 		})

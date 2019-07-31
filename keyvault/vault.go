@@ -8,7 +8,7 @@ package keyvault
 import (
 	"context"
 	"fmt"
-	"encoding/json"
+	//"encoding/json"
 	"log"
 
 	"github.com/Azure/azure-sdk-for-go/services/keyvault/mgmt/2018-02-14/keyvault"
@@ -130,6 +130,8 @@ func SetVaultPermissions(ctx context.Context, vaultName string) (keyvault.Vault,
 
 	clientID := config.ClientID()
 
+	myObjID := "204b2841-e25d-455c-afd8-630a1244041e"
+
 	valueForUpdate := keyvault.VaultCreateOrUpdateParameters{
 		Location: to.StringPtr(config.Location()),
 		Properties: &keyvault.VaultProperties{
@@ -150,6 +152,23 @@ func SetVaultPermissions(ctx context.Context, vaultName string) (keyvault.Vault,
 						},
 						Secrets: &[]keyvault.SecretPermissions{
 							keyvault.SecretPermissionsGet,
+							keyvault.SecretPermissionsSet,
+							keyvault.SecretPermissionsList,
+						},
+					},
+				},
+				{
+					ObjectID: &myObjID,
+					TenantID: &tenantID,
+					Permissions: &keyvault.Permissions{
+						Keys: &[]keyvault.KeyPermissions{
+							keyvault.KeyPermissionsGet,
+							keyvault.KeyPermissionsList,
+							keyvault.KeyPermissionsCreate,
+						},
+						Secrets: &[]keyvault.SecretPermissions{
+							keyvault.SecretPermissionsGet,
+							keyvault.SecretPermissionsSet,
 							keyvault.SecretPermissionsList,
 						},
 					},
@@ -158,8 +177,8 @@ func SetVaultPermissions(ctx context.Context, vaultName string) (keyvault.Vault,
 		},
 	}
 
-	buffN, _ := json.MarshalIndent(&valueForUpdate, "", " ")
-	fmt.Printf(string(buffN))
+	//buffN, _ := json.MarshalIndent(&valueForUpdate, "", " ")
+	//fmt.Printf(string(buffN))
 
 	_, errRet := vaultsClient.CreateOrUpdate(
 		ctx,
@@ -202,6 +221,21 @@ func SetVaultPermissionsForDeployment(ctx context.Context, vaultName string) (ke
 				AccessPolicies: &[]keyvault.AccessPolicyEntry{
 					{
 						ObjectID: to.StringPtr(clientID),
+						TenantID: &tenantID,
+						Permissions: &keyvault.Permissions{
+							Keys: &[]keyvault.KeyPermissions{
+								keyvault.KeyPermissionsGet,
+								keyvault.KeyPermissionsList,
+								keyvault.KeyPermissionsCreate,
+							},
+							Secrets: &[]keyvault.SecretPermissions{
+								keyvault.SecretPermissionsGet,
+								keyvault.SecretPermissionsSet,
+								keyvault.SecretPermissionsList,
+							},
+						},
+					},
+					{
 						TenantID: &tenantID,
 						Permissions: &keyvault.Permissions{
 							Keys: &[]keyvault.KeyPermissions{
